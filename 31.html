@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Магазин</title>
+    <style>
+        body {
+            display: flex;
+            justify-content: space-between;
+        }
+        .block {
+            width: 30%;
+            padding: 10px;
+            border: 1px solid #000;
+            height: 100vh;
+            overflow-y: auto;
+        }
+        .block.hidden {
+            display: none;
+        }
+        .button {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+        .button:hover {
+            color: darkblue;
+        }
+    </style>
+</head>
+<body>
+    <div id="categories" class="block">
+        <h3>Категорії</h3>
+        <ul>
+            <li class="button" data-category="electronics">Електроніка</li>
+            <li class="button" data-category="clothing">Одяг</li>
+            <li class="button" data-category="books">Книги</li>
+        </ul>
+    </div>
+    <div id="products" class="block hidden">
+        <h3>Товари</h3>
+        <ul id="product-list"></ul>
+    </div>
+    <div id="product-info" class="block hidden">
+        <h3>Інформація про товар</h3>
+        <div id="product-details"></div>
+        <button id="buy-button">Купити</button>
+    </div>
+
+    <script>
+        const categories = {
+            electronics: ['Телефон', 'Ноутбук', 'Телевізор'],
+            clothing: ['Футболка', 'Штани', 'Куртка'],
+            books: ['Книга 1', 'Книга 2', 'Книга 3']
+        };
+
+        const categoriesBlock = document.getElementById('categories');
+        const productsBlock = document.getElementById('products');
+        const productInfoBlock = document.getElementById('product-info');
+        const productList = document.getElementById('product-list');
+        const productDetails = document.getElementById('product-details');
+        const buyButton = document.getElementById('buy-button');
+
+        document.querySelectorAll('#categories .button').forEach(categoryElement => {
+            categoryElement.addEventListener('click', () => {
+                const category = categoryElement.getAttribute('data-category');
+                showProducts(category);
+            });
+        });
+
+        function showProducts(category) {
+            productList.innerHTML = '';
+            categories[category].forEach(product => {
+                const productElement = document.createElement('li');
+                productElement.textContent = product;
+                productElement.classList.add('button');
+                productElement.addEventListener('click', () => showProductInfo(product));
+                productList.appendChild(productElement);
+            });
+            productsBlock.classList.remove('hidden');
+            productInfoBlock.classList.add('hidden');
+        }
+
+        function showProductInfo(product) {
+            productDetails.textContent = `Інформація про ${product}`;
+            productsBlock.classList.add('hidden');
+            productInfoBlock.classList.remove('hidden');
+        }
+
+        buyButton.addEventListener('click', () => {
+            alert('Товар куплений!');
+            resetView();
+        });
+
+        function resetView() {
+            productsBlock.classList.add('hidden');
+            productInfoBlock.classList.add('hidden');
+            categoriesBlock.classList.remove('hidden');
+        }
+    </script>
+</body>
+</html>
